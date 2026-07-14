@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Package Export</title>
+
+  <style>
+      
+
+ 
+      
+
+      
+ 
+      
+ 
+      
+ 
+      
+ 
+      
+ 
+      
+ * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      font-family: urbanist !important;
+      color: #101828;
+      font-weight: 600;
+      background: #f5f6fb !important;
+      /*! background: white !important; */
+    }
+
+    .pkg-page {
+      padding: 15px 24px;
+      min-height: 100vh;
+      padding-bottom: 0 !important;
+      /*! padding-bottom: 0 !important; */
+    }
+
+    .pkg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .pkg-header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      color: #303a69;
+    }
+
+    .pkg-header p {
+      margin: 6px 0 0;
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .header-actions {
+      display: none;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: urbanist !important;
+    }
+
+    .btn.primary {
+      background: #0d6efd;
+      color: #fff;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: #344054;
+      border: 1px solid #d0d5dd;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .summary-card {
+      background: #fff;
+      border: 1px solid #e4e7ec;
+      border-radius: 6px;
+      padding: 7px 14px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+    }
+
+    .summary-card:hover,
+    .summary-card.active {
+      /*! border-bottom: 2px solid !important; */
+      box-shadow: 0 10px 30px rgba(13, 110, 253, 0.15);
+      transform: translateY(-2px);
+      /*! border: 1px solid #ccc !important; */
+       border: 1px solid #303a6966 !important;
+    }
+
+    .card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .blue { background: #f4bc01; color: #0d6efd; color: white !important;}
+    .purple { background: #3d5996; color: #7f56d9; color: #fff !important;}
+    .green { background: #e80502; color: #039855; color: #fff !important;}
+    .orange { background: #73a29a; color: #f79009; color: #fff;}
+
+    .summary-card label {
+      color: #667085;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .summary-card h2 {
+      margin: 3px 0 0 0;
+      font-size: 19px;
+    }
+
+    .pkg-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr 320px;
+      gap: 10px;
+      /*! height: calc(100vh - 390px); */
+    }
+
+    .pkg-sidebar,
+    .pkg-content,
+    .publish-panel {
+      background: #fff;
+      border: 1px solid #e4e7ec;
+      border-radius: 0;
+      padding: 18px;
+      height: calc(100vh - 220px);
+      overflow: scroll;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+      /*! background: #6663e8; */
+    }
+
+    .pkg-sidebar h3,
+    .publish-panel h3 {
+      margin: 0 0 16px;
+      font-size: 16px;
+      background: #f5f6fb;
+      padding: 9px 15px;
+      margin-inline: -16px;
+      margin-top: -15px;
+      position: sticky;
+      top: -19px;
+    }
+
+    .side-link {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      cursor: pointer;
+      color: #344054;
+      font-family: urbanist !important;
+    }
+
+    .side-link.active,
+    .side-link:hover {
+      background: #eef4ff;
+      color: #0d6efd;
+      background: #303a69;
+      color: white;
+    }
+
+    .content-toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .search-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #f9fafb;
+      border: 1px solid #d0d5dd;
+      border-radius: 0;
+      padding: 0 12px;
+    }
+
+    .search-box input {
+      border: 0;
+      background: transparent;
+      width: 100%;
+      outline: none;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    select,
+    input,
+    textarea {
+      border: 1px solid #d0d5dd;
+      border-radius: 0;
+      padding: 11px 11px;
+      outline: none;
+      font-size: 13px;
+      font-family: urbanist;
+      font-weight: 600;
+    }
+
+    .table-card {
+      border: 1px solid #eaecf0;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .table-head,
+    .table-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+    }
+
+    .table-head {
+      background: #f9fafb;
+      color: #667085;
+      font-size: 13px;
+      font-weight: 800;
+        padding: 7px 16px;
+    }
+
+    .table-row {
+      border-top: 1px solid #eaecf0;
+    }
+
+    .table-row:hover,
+    .table-row.selected {
+      background: #f5f9ff;
+    }
+
+    .table-row label {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .table-row strong {
+      font-size: 14px;
+    }
+
+    .table-row small {
+      display: block;
+      color: #667085;
+      margin-top: 3px;
+    }
+
+    .pill {
+      width: max-content;
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .pill.tstruct { background: #eaf2ff; color: #0d6efd; }
+    .pill.iview { background: #f4ebff; color: #7f56d9; }
+    .pill.page { background: #ecfdf3; color: #039855; }
+    .pill.datasource { background: #fff4e5; color: #f79009; }
+    .pill.role { background: #f2f4f7; color: #344054; }
+    .pill.db { background: #fef3f2; color: #d92d20; }
+
+    .object-meta {
+      color: #4a4e57;
+      font-size: 13px;
+    }
+
+    .publish-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      color: #475467;
+      font-size: 14px;
+    }
+
+    .publish-panel label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #344054;
+    }
+
+    .publish-panel textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .helper-card {
+      background: #f9fafb;
+      border: 1px dashed #d0d5dd;
+      border-radius: 14px;
+      padding: 14px;
+      color: #475467;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .helper-card strong {
+      display: block;
+      color: #101828;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .full {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .sticky-bar {
+      position: sticky;
+      bottom: 0px;
+      margin-top: 16px;
+      background: #303a69;
+      color: #fff;
+      border-radius: 0;
+      padding: 5px 17px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 16px 40px rgba(16, 24, 40, 0.25);
+      margin-inline: -24px;
+    }
+
+    .sticky-bar strong {
+      margin-right: 10px;
+    }
+
+    .sticky-bar span {
+      color: #d0d5dd;
+      margin-right: auto;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(16, 24, 40, 0.58);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 24px;
+    }
+
+    .modal {
+      width: min(980px, 100%);
+      max-height: 90vh;
+      overflow: hidden;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 30px 80px rgba(16, 24, 40, 0.35);
+    }
+
+    .modal-header {
+      padding: 14px 24px;
+      border-bottom: 1px solid #eaecf0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f5f6fb;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-body {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 20px;
+      height: calc(100vh - 200px);
+      overflow: hidden;
+    }
+
+    .modal-list {
+      border: 1px solid #eaecf0;
+      border-radius: 14px;
+      overflow: hidden;
+      height: calc(100vh - 33%);
+      overflow: scroll;
+    }
+
+    .modal-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #eaecf0;
+      align-items: center;
+    }
+
+    .modal-row:last-child {
+      border-bottom: 0;
+    }
+
+    .modal-row small {
+      color: #667085;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .modal-side {
+      background: #f9fafb;
+      border: 1px solid #eaecf0;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: calc(100vh - 28%);
+      overflow: scroll;
+    }
+
+    .modal-footer {
+      padding: 8px 24px;
+      border-top: 1px solid #eaecf0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    @media (max-width: 1200px) {
+      .pkg-layout {
+        grid-template-columns: 220px 1fr;
+      }
+
+      .publish-panel {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .pkg-header,
+      .content-toolbar,
+      .sticky-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .pkg-layout,
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .table-head {
+        display: none;
+      }
+
+      .table-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  
+      
+/*      customize*/
+      .summary-card div:nth-child(2) {
+	/*! display: flex; */
+	align-items: center;
+}
+      #summaryCards .summary-card:nth-child(4n+1) {
+  /*! background: #fef5e6; */
+  /*! border: 1px solid #f4bc01; */
+}
+#summaryCards .summary-card:nth-child(4n+2) {
+  /*! background: #f4f9fe; */
+  /*! border: 1px solid #3d59966b; */
+}
+#summaryCards .summary-card:nth-child(4n+3) {
+  /*! background: #ffeeec; */
+  /*! border: 1px solid #e8050240; */
+}
+#summaryCards .summary-card:nth-child(4n+4) {
+  /*! background: #e5fffb; */
+  /*! border: 1px solid #73a29a8f; */
+}
+     
+ #summaryCards .summary-card:nth-child(4n+1) h2 {
+  color: #755c09;
+}
+#summaryCards .summary-card:nth-child(4n+2) h2 {
+  color: #3d5996;
+}
+#summaryCards .summary-card:nth-child(4n+3) h2 {
+  color: #c60b09;
+}
+#summaryCards .summary-card:nth-child(4n+4) h2 {
+  color: #4d746d;
+}  
+      
+      .pkg-content {
+  overflow: hidden;
+}
+.pkg-content .table-card {
+  overflow-y: scroll;
+  height: calc(100% - 55px);
+  overflow-x: hidden;
+}
+      .pkg-content .table-head {
+  position: sticky;
+  top: 0;
+}
+      
+      .modal-header p {
+  font-size: 14px;
+  margin-top: 4px !important;
+}
+      strong {
+  font-weight: 700;
+}
+      .modal-body h3 {
+  font-size: 17px;
+  font-weight: 700;
+}
+      .modal-row strong {
+	font-size: 15px;
+}
+     
+    
+    
+     
+    
+     
+    
+     
+    
+     
+    </style>
+</head>
+
+<body>
+  <div class="pkg-page">
+
+    <div class="pkg-header">
+      <div>
+        <h1>Package Export</h1>
+        <p>Select Axi Objects and publish the package to Git</p>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn secondary">Save Draft</button>
+        <button class="btn primary">Publish to Git</button>
+      </div>
+    </div>
+
+    <div class="summary-grid" id="summaryCards"></div>
+
+    <div class="pkg-layout">
+
+      <aside class="pkg-sidebar">
+        <h3>Object Types</h3>
+        <div id="sideMenu"></div>
+      </aside>
+
+      <main class="pkg-content">
+        <div class="content-toolbar">
+          <div class="search-box">
+            <span>🔍</span>
+            <input id="searchInput" placeholder="Search by object name, code, type..." />
+          </div>
+
+          <select id="sortBy">
+            <option value="name">Sort by Name</option>
+            <option value="type">Sort by Type</option>
+          </select>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">
+            <label>
+              <input type="checkbox" id="selectAll" />
+              Object
+            </label>
+            <span>Object Type</span>
+            <span>Export Information</span>
+          </div>
+
+          <div id="objectRows"></div>
+        </div>
+      </main>
+
+      <aside class="publish-panel">
+        <h3>Package Summary</h3>
+
+        <div class="summary-line">
+          <span>Total Objects</span>
+          <b>370</b>
+        </div>
+
+        <div class="summary-line">
+          <span>Selected Objects</span>
+          <b id="selectedCount">0</b>
+        </div>
+
+        <div class="summary-line">
+          <span>Selected Types</span>
+          <b id="selectedTypes">0</b>
+        </div>
+
+        <hr />
+
+        <label>Package Name</label>
+        <input id="packageName" value="application_export_package" />
+
+        <label>Git Branch</label>
+        <select id="gitBranch">
+          <option>main</option>
+          <option>dev</option>
+          <option>release/v1</option>
+        </select>
+
+        <label>Commit Message</label>
+        <textarea id="commitMessage">Export selected Axi objects</textarea>
+
+        <div class="helper-card">
+          <strong>Export Notes</strong>
+          Selected objects will be grouped by object type and prepared as one package before publishing to Git.
+        </div>
+
+        <button class="btn primary full" onclick="openPreviewModal()">Preview & Publish</button>
+      </aside>
+    </div>
+
+    <div class="sticky-bar">
+      <strong id="footerSelected">0 objects selected</strong>
+      <span id="footerStatus">Select objects to create package</span>
+      <button class="btn primary" onclick="openPreviewModal()">Preview & Publish</button>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="previewModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2>Preview Package</h2>
+          <p style="margin:6px 0 0;color:#667085;">Review selected objects before publishing to Git.</p>
+        </div>
+        <button class="btn secondary" onclick="closePreviewModal()">Close</button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <h3 style="margin-top:0;">Selected Objects</h3>
+          <div class="modal-list" id="modalObjectList"></div>
+        </div>
+
+        <div class="modal-side">
+          <h3 style="margin:0;">Publish Details</h3>
+
+          <label>Package Name</label>
+          <input id="modalPackageName" />
+
+          <label>Git Branch</label>
+          <select id="modalGitBranch">
+            <option>main</option>
+            <option>dev</option>
+            <option>release/v1</option>
+          </select>
+
+          <label>Commit Message</label>
+          <textarea id="modalCommitMessage"></textarea>
+
+          <div class="summary-line">
+            <span>Objects</span>
+            <b id="modalSelectedCount">0</b>
+          </div>
+
+          <div class="summary-line">
+            <span>Types</span>
+            <b id="modalTypeCount">0</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn secondary" onclick="closePreviewModal()">Cancel</button>
+        <button class="btn primary" onclick="publishPackage()">Publish Package</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const objects = [
+      { id: "ts_001", name: "Sales Order", code: "slord", type: "TStructs" },
+      { id: "ts_002", name: "Purchase Order", code: "tslpo", type: "TStructs" },
+      { id: "ts_003", name: "Delivery Note", code: "dlchl", type: "TStructs" },
+      { id: "iv_001", name: "Stock Ledger", code: "stkledge", type: "iViews" },
+      { id: "iv_002", name: "Trial Balance", code: "trialbal", type: "iViews" },
+      { id: "iv_003", name: "Sales Orders", code: "pendngso", type: "iViews" },
+      { id: "pg_001", name: "Inbox", code: "Inbox | NA | Inbox", type: "Pages" },
+      { id: "pg_002", name: "Analytics", code: "HP1773835519890", type: "Pages" },
+      { id: "ds_001", name: "Customer Data Source", code: "ds_customer", type: "Data Sources" },
+      { id: "ds_002", name: "Item Stock Data Source", code: "ds_item_stock", type: "Data Sources" },
+      { id: "role_001", name: "Admin Role", code: "axrol_admin", type: "User Roles" },
+      { id: "db_001", name: "Sales Summary View", code: "vw_sales_summary", type: "DB Objects" }
+    ];
+
+    const typeCountsFromServer = {
+      "TStructs": 148,
+      "iViews": 43,
+      "Pages": 10,
+      "Data Sources": 137,
+      "User Roles": 8,
+      "DB Objects": 24
+    };
+
+    const typeColors = {
+      "TStructs": "blue",
+      "iViews": "purple",
+      "Pages": "green",
+      "Data Sources": "orange",
+      "User Roles": "green",
+      "DB Objects": "orange"
+    };
+
+    const typeClass = {
+      "TStructs": "tstruct",
+      "iViews": "iview",
+      "Pages": "page",
+      "Data Sources": "datasource",
+      "User Roles": "role",
+      "DB Objects": "db"
+    };
+
+    const selectedObjects = new Set();
+    let activeType = "";
+
+    document.getElementById("searchInput").addEventListener("input", renderRows);
+    document.getElementById("sortBy").addEventListener("change", renderRows);
+
+    document.getElementById("selectAll").addEventListener("change", function () {
+      getFilteredObjects().forEach(obj => {
+        this.checked ? selectedObjects.add(obj.id) : selectedObjects.delete(obj.id);
+      });
+
+      renderRows();
+      updateSummary();
+    });
+
+    function init() {
+      renderSummaryCards();
+      renderSideMenu();
+      renderRows();
+      updateSummary();
+    }
+
+    function getTypes() {
+      return Object.keys(typeCountsFromServer);
+    }
+
+    function setActiveType(type) {
+      activeType = type;
+      renderSummaryCards();
+      renderSideMenu();
+      renderRows();
+    }
+
+    function renderSummaryCards() {
+      document.getElementById("summaryCards").innerHTML = getTypes()
+        .filter(type => ["TStructs", "iViews", "Pages", "Data Sources"].includes(type))
+        .map(type => `
+          <div class="summary-card ${activeType === type ? "active" : ""}" onclick="setActiveType('${type}')">
+            <div class="card-icon ${typeColors[type]}">${getShortName(type)}</div>
+            <div>
+              <label>${type}</label>
+              <h2>${typeCountsFromServer[type]}</h2>
+            </div>
+          </div>
+        `).join("");
+    }
+
+    function renderSideMenu() {
+      const total = Object.values(typeCountsFromServer).reduce((a, b) => a + b, 0);
+
+      document.getElementById("sideMenu").innerHTML = `
+        <button class="side-link ${activeType === "" ? "active" : ""}" onclick="setActiveType('')">
+          <span>All Objects</span>
+          <b>${total}</b>
+        </button>
+        ${getTypes().map(type => `
+          <button class="side-link ${activeType === type ? "active" : ""}" onclick="setActiveType('${type}')">
+            <span>${type}</span>
+            <b>${typeCountsFromServer[type]}</b>
+          </button>
+        `).join("")}
+      `;
+    }
+
+    function getFilteredObjects() {
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const sortBy = document.getElementById("sortBy").value;
+
+      let data = objects.filter(obj => {
+        const matchType = !activeType || obj.type === activeType;
+        const matchSearch =
+          obj.name.toLowerCase().includes(search) ||
+          obj.code.toLowerCase().includes(search) ||
+          obj.type.toLowerCase().includes(search);
+
+        return matchType && matchSearch;
+      });
+
+      data.sort((a, b) => String(a[sortBy]).localeCompare(String(b[sortBy])));
+
+      return data;
+    }
+
+    function renderRows() {
+      const data = getFilteredObjects();
+
+      if (!data.length) {
+        document.getElementById("objectRows").innerHTML = `
+          <div style="padding:30px;color:#667085;text-align:center;">
+            No objects found
+          </div>
+        `;
+        return;
+      }
+
+      document.getElementById("objectRows").innerHTML = data.map(obj => {
+        const checked = selectedObjects.has(obj.id);
+        const pillClass = typeClass[obj.type] || "role";
+
+        return `
+          <div class="table-row ${checked ? "selected" : ""}">
+            <label>
+              <input type="checkbox" ${checked ? "checked" : ""} onchange="toggleSelect('${obj.id}', this.checked)" />
+              <div>
+                <strong>${obj.name}</strong>
+                <small>${obj.code}</small>
+              </div>
+            </label>
+
+            <span class="pill ${pillClass}">${obj.type}</span>
+
+            <div class="object-meta">
+              Included in package export by object type.
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleSelect(id, checked) {
+      checked ? selectedObjects.add(id) : selectedObjects.delete(id);
+      renderRows();
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const selected = objects.filter(obj => selectedObjects.has(obj.id));
+      const typeCount = new Set(selected.map(x => x.type)).size;
+
+      document.getElementById("selectedCount").innerText = selected.length;
+      document.getElementById("selectedTypes").innerText = typeCount;
+      document.getElementById("footerSelected").innerText = `${selected.length} objects selected`;
+      document.getElementById("footerStatus").innerText =
+        selected.length ? "Ready to preview and publish" : "Select objects to create package";
+    }
+
+    function openPreviewModal() {
+      const selected = objects.filter(obj => selectedObjects.has(obj.id));
+
+      if (!selected.length) {
+        alert("Please select at least one object.");
+        return;
+      }
+
+      document.getElementById("modalPackageName").value = document.getElementById("packageName").value;
+      document.getElementById("modalGitBranch").value = document.getElementById("gitBranch").value;
+      document.getElementById("modalCommitMessage").value = document.getElementById("commitMessage").value;
+
+      document.getElementById("modalSelectedCount").innerText = selected.length;
+      document.getElementById("modalTypeCount").innerText = new Set(selected.map(x => x.type)).size;
+
+      document.getElementById("modalObjectList").innerHTML = selected.map(obj => `
+        <div class="modal-row">
+          <div>
+            <strong>${obj.name}</strong>
+            <small>${obj.code}</small>
+          </div>
+          <span class="pill ${typeClass[obj.type]}">${obj.type}</span>
+        </div>
+      `).join("");
+
+      document.getElementById("previewModal").style.display = "flex";
+    }
+
+    function closePreviewModal() {
+      document.getElementById("previewModal").style.display = "none";
+    }
+
+    function publishPackage() {
+      const selected = objects.filter(obj => selectedObjects.has(obj.id));
+
+      if (!selected.length) {
+        alert("Please select at least one object.");
+        return;
+      }
+
+      const packageData = {
+        packageName: document.getElementById("modalPackageName").value || document.getElementById("packageName").value,
+        gitBranch: document.getElementById("modalGitBranch").value || document.getElementById("gitBranch").value,
+        commitMessage: document.getElementById("modalCommitMessage").value || document.getElementById("commitMessage").value,
+        objects: selected
+      };
+
+      console.log("Publishing Package:", packageData);
+      alert(`Publishing ${selected.length} objects to Git.`);
+      closePreviewModal();
+    }
+
+    function getShortName(type) {
+      if (type === "TStructs") return "TS";
+      if (type === "iViews") return "IV";
+      if (type === "Pages") return "PG";
+      if (type === "Data Sources") return "DS";
+      if (type === "User Roles") return "UR";
+      if (type === "DB Objects") return "DB";
+      return "OB";
+    }
+
+    init();
+  </script>
+</body>
+</html>
