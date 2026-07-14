@@ -16,8 +16,8 @@
           "submitdata": {
             "dc1": {
               "row1": {
-                "pageno": "1783669056173",
-                "caption": "PageTest2",
+                "pageno": "1783669056666",
+                "caption": "PagePackageTest",
                 "AxpFilePath_hpImages": "pgbase114\\HTMLPages\\images\\*",
                 "isacoretrans": "Yes",
                 "menuposition": "Default"
@@ -26,11 +26,11 @@
             "dc2": {},
             "dc3": {
               "row1": {
-                "filename": "test2css.css",
+                "filename": "test2Pkgcss.css",
                 "filetype": "Css"
               },
               "row2": {
-                "filename": "test2js.js",
+                "filename": "test2Pkgjs.js",
                 "filetype": "Js"
               }
             }
