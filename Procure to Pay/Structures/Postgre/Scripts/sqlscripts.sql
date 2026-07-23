@@ -1,6 +1,15 @@
 <<
+delete from axpages where name = 'HP1784290396716'
+>>
+
+<<
 INSERT INTO axpages (name,caption,props,blobno,img,visible,type,parent,ordno,levelno,updatedon,createdon,importedon,createdby,updatedby,importedby,readonly,updusername,category,pagetype,intview,webenable,shortcut,icon,websubtype,workflow,oldappurl) VALUES ('HP1784290396716','PayrollDashboard','htmlPages.aspx?load=1784290396716',1,NULL,'T','p',NULL,(SELECT COALESCE(MAX(ordno),0) + 1 FROM axpages),0,'17/07/2026 17:48:22','17/07/2026 5:37:56 PM',NULL,'admin','admin',NULL,NULL,NULL,NULL,'web',NULL,NULL,NULL,NULL,'htmlpage',NULL,NULL)
 >>
+
+<<
+delete from axpstructconfig where asprops = 'Landing Structure'
+>>
+
 
 <<
 insert
@@ -78,6 +87,10 @@ null)
 >>
 
 <<
+delete from axdirectsql where sqlname = 'Pending Purchase Order Data'
+>>
+
+<<
 INSERT INTO axdirectsql
 (axdirectsqlid, cancel, sourceid, mapname, username, modifiedon, createdby, createdon, wkid, app_level, app_desc, app_slevel, cancelremarks, wfroles, sqlname, ddldatatype, sqlsrc, sqlsrccnd, sqltext, paramcal, sqlparams, accessstring, groupname, sqlquerycols, cachedata, cacheinterval, encryptedflds, adsdesc, smartlistcnd, pagination, applydimensions)
 VALUES(2201990000000, 'F', 0, NULL, 'ashokk', '2026-06-18 21:17:12.000', 'ashokk', '2026-06-02 16:50:26.000', NULL, 1, 1, NULL, NULL, NULL, 'Pending Purchase Order Data', NULL, 'For users', 3, 'SELECT br.branchname,d.party_name as party_name,a.docdate,a.docid, concat(i.categoryname,'' - '', p.productcategory,'' - '' ,m.brand_name) as category,
@@ -96,6 +109,10 @@ c.itemdesc, c.uom, b.qty, b.shortcloseqty, b.receivedqty,
       and c.itembrand = m.brand_masterid
    AND a.company = cast( :m_companyid as numeric)
   ORDER BY cast(a.docdate as date) desc', 'm_companyid', 'm_companyid~Numeric~', 'ALL', NULL, 'branchname,party_name,docdate,docid,category,itemdesc,uom,qty,shortcloseqty,receivedqty,pending_qty,po_value,pending_value', 'T', '1 Hr', NULL, 'Pending Purchase Order Data', NULL, 'T', 'F')
+>>
+
+<<
+delete from axdirectsql where sqlname = 'Purchase Summary'
 >>
 
 <<
@@ -132,4 +149,61 @@ group by a.docdate,to_char(a.docdate,''MON-YY'') ,s.statejurisdiction , s.party_
 to_char(a.docdate,''Mon'') ,to_char(a.docdate,''YYYY'') ,
 concat(''Q'',EXTRACT(QUARTER FROM  a.docdate)) 
 order by s.party_name,a.docdate', 'm_companyid', 'm_companyid~Numeric~', 'ALL', NULL, 'docdate,state,party_name,categoryname,productcategory,brand_name,itemdesc,po_qty,recivedqty,returnedqty,amount,tax_amount,disc_amount,net_amount,mnth,yr,qtr', 'T', '1 Hr', NULL, 'Purchase Summary Data', NULL, 'T', 'F')
+>>
+
+<<
+delete from axdirectsql where sqlname = 'ds_custom_useraccess'
+>>
+
+<<
+INSERT INTO axdirectsql (axdirectsqlid, cancel, sourceid, mapname, username, modifiedon, createdby, createdon, wkid, app_level, app_desc, app_slevel, cancelremarks, wfroles, sqlname, ddldatatype, sqlsrc, sqlsrccnd, sqltext, paramcal, sqlparams, accessstring, groupname, sqlquerycols, cachedata, cacheinterval, encryptedflds, adsdesc, smartlistcnd, pagination, applydimensions) VALUES(1339770000000, 'F', 0, NULL, 'admin', '2026-06-23 13:21:29.000', 'admin', '2026-06-23 13:21:29.000', NULL, 1, 1, NULL, NULL, NULL, 'ds_custom_useraccess', NULL, 'For developers', 2, 'select * from 
+(SELECT a2.username,
+    a3.groupname,
+    a5.rname,
+    a5.sname,
+    a5.stype,
+        CASE a5.stype
+            WHEN ''t'' THEN t.caption
+            WHEN ''i'' THEN i.caption
+            WHEN ''p'' THEN p.caption
+            ELSE NULL 
+        END AS caption
+   FROM axusergroups a3
+     JOIN axusergroupsdetail a4 ON a3.axusergroupsid = a4.axusergroupsid
+     JOIN axuseraccess a5 ON a4.roles_id = a5.rname
+     LEFT JOIN axuserlevelgroups a2 ON a2.usergroup = a3.groupname AND a2.usergroup <> ''default''
+     LEFT JOIN tstructs t ON a5.sname = t.name AND t.blobno = 1::numeric
+     LEFT JOIN iviews i ON a5.sname = i.name
+     LEFT JOIN axpages p ON a5.sname = p.name AND p.pagetype = ''web''
+     where (a5.stype in(''i'',''t'') or p.pagetype =''web'')     
+UNION ALL
+SELECT DISTINCT a2.username,
+    ''default'' AS groupname,
+    ''default'' AS rname,
+    t.name AS sname,
+    ''t'' AS stype,
+    t.caption
+   FROM tstructs t
+     LEFT JOIN axuserlevelgroups a2 ON a2.usergroup = ''default''
+  WHERE t.blobno = 1::numeric
+UNION ALL
+SELECT DISTINCT a2.username,
+    ''default'' AS groupname,
+    ''default'' AS rname,
+    i.name AS sname,
+    ''i'' AS stype,
+    i.caption
+   FROM iviews i
+     LEFT JOIN axuserlevelgroups a2 ON a2.usergroup = ''default''
+UNION ALL
+SELECT DISTINCT a2.username,
+    ''default'' AS groupname,
+    ''default'' AS rname,
+    p.name AS sname,
+    ''p'' AS stype,
+    p.caption
+   FROM axpages p
+     LEFT JOIN axuserlevelgroups a2 ON a2.usergroup = ''default''
+  WHERE p.pagetype = ''web'')a 
+  where a.username = :puser', 'puser', 'puser~Character~', 'ALL', NULL, 'username,groupname,rname,sname,stype,caption', 'F', '6 Hr', NULL, NULL, NULL, 'T', 'F')
 >>
