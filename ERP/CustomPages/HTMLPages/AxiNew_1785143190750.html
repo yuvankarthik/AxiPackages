@@ -1,0 +1,97 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXI - AI Integrated Axpert</title>
+    
+    <!-- Internal CSS Styles -->
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .showcase-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 550px;
+            width: 100%;
+            /* Hidden initially for JavaScript animation hook */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        /* JavaScript toggles this class to fade in the element */
+        .showcase-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .brand-title {
+            font-size: 42px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #38bdf8;
+            margin-bottom: 4px;
+        }
+
+        .brand-subtitle {
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            margin-bottom: 24px;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+            padding-bottom: 12px;
+        }
+
+        .brand-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HTML Structure -->
+    <div class="showcase-card" id="displayCard">
+        <h1 class="brand-title">AXI</h1>
+        <div class="brand-subtitle">Ai integrated axpert</div>
+        <p class="brand-description">
+            Axpert is a revolutionary US-patented, RAD platform that simplifies Software Development Life Cycle (SDLC), reducing complex processes. It is easier to create and deploy apps custom-fit for your business needs and demands.
+        </p>
+    </div>
+
+    <!-- Internal JavaScript -->
+    <script>
+        // Trigger a smooth fade-in animation once the page layout finishes loading
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.getElementById('displayCard');
+            
+            // Short delay to allow browser rendering engine to catch up
+            setTimeout(() => {
+                card.classList.add('visible');
+            }, 150);
+        });
+    </script>
+
+
+</body></html>
