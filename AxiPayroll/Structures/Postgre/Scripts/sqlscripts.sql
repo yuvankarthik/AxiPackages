@@ -1,7 +1,0 @@
-<<
-INSERT INTO axpages (name,caption,props,blobno,img,visible,type,parent,ordno,levelno,updatedon,createdon,importedon,createdby,updatedby,importedby,readonly,updusername,category,pagetype,intview,webenable,shortcut,icon,websubtype,workflow,oldappurl) VALUES ('HP1784290396716','PayrollDashboard','htmlPages.aspx?load=1784290396716',1,NULL,'T','p',NULL,(SELECT COALESCE(MAX(ordno),0) + 1 FROM axpages),0,'17/07/2026 17:48:22','17/07/2026 5:37:56 PM',NULL,'admin','admin',NULL,NULL,NULL,NULL,'web',NULL,NULL,NULL,NULL,'htmlpage',NULL,NULL)
->>
-
-<<
-INSERT INTO axpstructconfig (axpstructconfigid, cancel, sourceid, mapname, username, modifiedon, createdby, createdon, wkid, app_level, app_desc, app_slevel, cancelremarks, wfroles, asprops, setype, props, context, propvalue1, uploadfiletype, propvalue2, propsval, alluserroles, structcaption, structname, structelements, structelements1, sfield, icolumn, sbutton, hlink, stype, userroles, dupchk, purpose) VALUES(1016010000000, 'F', 0, NULL, 'admin', '2026-07-24 16:04:28.000', 'admin', '2026-07-24 16:04:28.000', NULL, 1, 1, NULL, NULL, NULL, 'Landing Structure', 'All', 'General', NULL, 'html pages', NULL, NULL, 'html pages', 'F', 'Axi Inbox(HP1784802774665)', 'HP1784802774665', NULL, NULL, NULL, NULL, NULL, NULL, 'html pages', 'ALL', 'Landing StructureHP1784802774665GeneralALL', NULL)
->>
